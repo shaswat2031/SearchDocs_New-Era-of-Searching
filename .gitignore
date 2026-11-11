@@ -1,0 +1,33 @@
+# Python virtual environments & bytecode
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# SQLite databases & WAL sidecar files
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# Next.js / Node.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/npm-debug.log*
+frontend/.env*
+
+# Environment & IDE / OS files
+.env
+.env.*
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
