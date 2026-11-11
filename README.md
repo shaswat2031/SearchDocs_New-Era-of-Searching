@@ -95,7 +95,8 @@ See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for BM25 formulas, query eval
 │   ├── package.json
 │   └── README.md                      # Frontend-specific notes & scripts
 ├── docs/
-│   └── ARCHITECTURE.md                # Internal formulas, pipeline & schema reference
+│   ├── ARCHITECTURE.md                # Internal formulas, pipeline & schema reference
+│   └── BENCHMARKS.md                  # Benchmark methodology & observed latency results
 ├── tests/
 │   └── test_searchcore.py             # Unit & integration tests (pytest)
 ├── LICENSE                            # MIT License
@@ -330,4 +331,5 @@ Licensed under the [MIT License](LICENSE).
 ## Further Documentation
 
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — Ranking math, tokenization boundaries, query AST evaluation, SQLite schema, and parallel shard protocol.
+- [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) — Benchmark suite details, CLI flags, and observed latency metrics.
 - [`frontend/README.md`](frontend/README.md) — Next.js Studio UI stack and frontend build instructions.
