@@ -52,17 +52,17 @@ SearchCore provides a positional inverted index, Okapi BM25 relevance ranking, a
 
 ```mermaid
 flowchart LR
-    UI["Next.js Studio UI<br/>(frontend/)"] -->|REST JSON / Multipart| API["FastAPI Server<br/>(searchcore/api.py)"]
-    CLI["Python SDK / Benchmark<br/>(searchcore/__init__.py)"] --> ENG
+    UI["Next.js Studio UI (frontend)"] -->|"REST JSON / Multipart"| API["FastAPI Server (searchcore/api.py)"]
+    CLI["Python SDK and Benchmark"] --> ENG["SearchEngine Coordinator (searchcore/index.py)"]
 
-    API --> IMP["Document Importer<br/>(PDF, DOCX, TXT, MD, ...)"]
-    IMP --> ENG["SearchEngine Coordinator<br/>(searchcore/index.py)"]
+    API --> IMP["Document Importer (PDF, DOCX, TXT, MD)"]
+    IMP --> ENG
     API --> ENG
 
-    ENG -->|Tokenize & Positions| TOK["Tokenizer<br/>(searchcore/tokenizer.py)"]
-    ENG -->|Atomic Upsert / Load| DB[("SQLite WAL<br/>documents & postings")]
-    ENG -->|Serial AST + BM25| IDX["In-Memory InvertedIndex"]
-    ENG -->|Sharded Pipe IPC| PAR["ParallelSearchEngine<br/>(Worker Processes)"]
+    ENG -->|"Tokenize and Positions"| TOK["Tokenizer (searchcore/tokenizer.py)"]
+    ENG -->|"Atomic Upsert and Load"| DB["SQLite WAL (documents and postings)"]
+    ENG -->|"Serial AST and BM25"| IDX["In-Memory InvertedIndex"]
+    ENG -->|"Sharded Pipe IPC"| PAR["ParallelSearchEngine (Worker Processes)"]
 ```
 
 See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for BM25 formulas, query evaluation precedence, SQLite schema definitions, and two-phase parallel search details.
