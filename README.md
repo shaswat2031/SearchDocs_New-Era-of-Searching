@@ -18,7 +18,9 @@ SearchCore provides a positional inverted index, Okapi BM25 relevance ranking, a
 - [Python Library Usage](#python-library-usage)
 - [HTTP API Reference](#http-api-reference)
 - [Benchmarking](#benchmarking)
+- [Testing](#testing)
 - [Configuration](#configuration)
+- [License](#license)
 - [Further Documentation](#further-documentation)
 
 ---
@@ -94,6 +96,9 @@ See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for BM25 formulas, query eval
 │   └── README.md                      # Frontend-specific notes & scripts
 ├── docs/
 │   └── ARCHITECTURE.md                # Internal formulas, pipeline & schema reference
+├── tests/
+│   └── test_searchcore.py             # Unit & integration tests (pytest)
+├── LICENSE                            # MIT License
 ├── pyproject.toml                     # Package metadata, dependencies & pytest config
 ├── requirements.txt                   # Runtime & test Python dependencies
 └── README.md
@@ -276,8 +281,33 @@ python -m searchcore.benchmark --docs 2000 --iterations 20 --workers 2
 
 CLI options:
 - `--docs` (default `2000`): number of synthetic documents to generate and index
-- `--iterations` (default `20`): repetitions over the 6-query benchmark suite
+- `--iterations` (default `20`): repetitions over the 6-query benchmark suite (`python`, `sqlite AND recovery`, `bm25 OR fastapi`, `"inverted index"`, `("search engine" OR "restart recovery") AND python`, `query AND NOT topic99`)
 - `--workers` (default `2`): number of spawned worker processes for parallel search
+
+### Sample Benchmark Output
+
+Measured locally on Windows (`Python 3.12.10`, `--docs 2000 --iterations 20 --workers 2`):
+
+- **Corpus:** `2,000` documents | `114,800` tokens | `2,427` vocabulary terms
+- **Batch Ingest:** `554.97 ms` (`3,603.8 docs/s`)
+- **SQLite Restart Recovery:** `186.78 ms`
+
+| Mode | Queries Run | Mean (ms) | p50 (ms) | p95 (ms) | p99 (ms) |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| `serial` | 120 | 1.636 | 1.675 | 2.657 | 3.228 |
+| `parallel(2w)` | 120 | 1.200 | 1.108 | 1.921 | 2.604 |
+
+---
+
+## Testing
+
+Run the pytest suite from the repository root:
+
+```bash
+pytest -v
+```
+
+*(On Windows with `.venv`: `.\.venv\Scripts\python.exe -m pytest -v`)*
 
 ---
 
@@ -288,6 +318,12 @@ CLI options:
 | `SEARCHCORE_DB` | `searchcore.db` | SQLite database file path used by [`create_app()`](searchcore/api.py#L170-L176) |
 | `NEXT_PUBLIC_API_BASE` | `http://127.0.0.1:8000` (on ports `3000`/`3001`), same-origin otherwise | Backend base URL used by [`frontend/src/lib/api.ts`](frontend/src/lib/api.ts) |
 | `create_app(db_path, enable_parallel, num_workers)` | `db_path=None`, `enable_parallel=False`, `num_workers=None` | Programmatic FastAPI factory; when `parallel=true` is requested on `/search`, workers are lazily started if not pre-warmed |
+
+---
+
+## License
+
+Licensed under the [MIT License](LICENSE).
 
 ---
 
